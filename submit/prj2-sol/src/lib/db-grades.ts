@@ -1,6 +1,5 @@
-import { Grades, Types as T, Errors as E} from 'prj1-sol';
-
-//import { GradesDao, makeGradesDao } from './grades-dao.js';
+import { Grades, Types as T, Errors as E } from 'prj1-sol';
+import { GradesDao } from './grades-dao.js';
 
 //placeholder; remove once there are no TODO's
 const TODO_ERR = E.Err.err('TODO', 'TODO');
@@ -10,23 +9,40 @@ export async function makeDbGrades(dbUrl: string,
 				   colAggrFns: Record<string, T.ColAggrFn>)
   : Promise<E.Result<DbGrades, E.Err>>
 {
-  //TODO: code to create a DAO which connects to the DB.
-  //TODO: code to create a cache Grades object
-  //TODO: initialize cache Grades object from DB.
-  return E.okResult(new DbGrades(/* TODO: actual params */));
-}
+  //create a DAO which connects to the DB.
+  const daoResult = await GradesDao.make(dbUrl);
+  if (!daoResult.isOk) return E.errResult(daoResult.err);
+  const dao = daoResult.val;
 
+  //create a cache Grades object
+  const grades = new Grades(rowAggrFns, colAggrFns);
+
+  // initialize cache Grades object from DB (load all students)
+  const studentsRes = await dao.getAllStudents();
+  if (!studentsRes.isOk) return E.errResult(studentsRes.err);
+  studentsRes.val.forEach(student => grades.addStudent(student));
+
+  const sectionInfosRes = await dao.getAllSectionInfos();
+  if (!sectionInfosRes.isOk) return E.errResult(sectionInfosRes.err);
+  sectionInfosRes.val.forEach(sectionInfo => grades.addSectionInfo(sectionInfo));
+
+  return E.okResult(new DbGrades(dao, grades));
+}
 
 export class DbGrades {
 
-  constructor(/* TODO: parameters for DAO and cache object */)
+  constructor(
+    private dao: GradesDao,
+    private grades: Grades
+  )
   {
-    //TODO
+    // DAO and Grades cache object are initialized
   }
 
   async close() : Promise<E.Result<void, E.Err>> {
     //TODO
-    return E.errResult(TODO_ERR);
+    await this.dao.close();
+  return E.okResult(undefined);
   }
 
   /** Clear out all data
@@ -35,13 +51,22 @@ export class DbGrades {
    */
   async clear() : Promise<E.Result<undefined, E.Err>> {
     //TODO
-    return E.errResult(TODO_ERR);
+    const clearRes = await this.dao.clear();
+    if (!clearRes.isOk) return E.errResult(clearRes.err);
+    this.grades.clear();
+    return E.okResult(undefined);
   }
 
   /** add or replace student in this Grades object. */
   async addStudent(student: T.Student): Promise<E.Result<undefined, E.Err>> {
     //TODO
-    return E.errResult(TODO_ERR);
+    // Add to cache (no result checking if it doesn't return Result)
+    this.grades.addStudent(student);
+
+    const daoRes = await this.dao.addStudent(student);
+    if (!daoRes.isOk) return E.errResult(daoRes.err);
+
+    return E.okResult(undefined);
   }
 
   /** return info for student */
@@ -49,7 +74,7 @@ export class DbGrades {
     : Promise<E.Result<T.Student, E.Err>>
   {
     //TODO
-    return E.errResult(TODO_ERR);
+    return this.grades.getStudent(studentId);
   }
 
   /** add or replace sectionInfo in this Grades object.
@@ -60,8 +85,14 @@ export class DbGrades {
   async addSectionInfo(sectionInfo: T.SectionInfo)
     : Promise<E.Result<void, E.Err>> 
   {
-    //TODO
-    return E.errResult(TODO_ERR);
+    const cacheRes = this.grades.addSectionInfo(sectionInfo);
+    if (!cacheRes.isOk) return E.errResult(cacheRes.err);
+
+    // Save to DB via DAO
+    const daoRes = await this.dao.addSectionInfo(sectionInfo);
+    if (!daoRes.isOk) return E.errResult(daoRes.err);
+
+    return E.okResult(undefined);
   }
 
   /** return section-info for sectionId */
@@ -69,7 +100,7 @@ export class DbGrades {
     : Promise<E.Result<T.SectionInfo, E.Err>>
   {
     //TODO
-    return E.errResult(TODO_ERR);
+    return this.grades.getSectionInfo(sectionId);
   }
 
   /** enroll student specified by studentId in section sectionId.  It is
@@ -82,7 +113,15 @@ export class DbGrades {
     : Promise<E.Result<void, E.Err>>
   {
     //TODO
-    return E.errResult(TODO_ERR);
+    // Validate in cache
+    const enrollRes = this.grades.enrollStudent(sectionId, studentId);
+    if (!enrollRes.isOk) return E.errResult(enrollRes.err);
+
+    // Persist enrollment
+    const daoRes = await this.dao.enrollStudent(sectionId, studentId);
+    if (!daoRes.isOk) return E.errResult(daoRes.err);
+
+    return E.okResult(undefined);
   }
  
   /** Return id's of all students enrolled in sectionId */
@@ -90,7 +129,7 @@ export class DbGrades {
     Promise<E.Result<T.StudentId[], E.Err>>
   {
     //TODO
-    return E.errResult(TODO_ERR);
+    return this.grades.getEnrolledStudentIds(sectionId);
   }
    
   /** add or replace score for studentId for assignment given by colId
@@ -104,7 +143,14 @@ export class DbGrades {
   async addScore(sectionId: T.SectionId, studentId: T.StudentId, colId: T.ColId,
 	         score: T.Score) : Promise<E.Result<void, E.Err>> {
     //TODO
-    return E.errResult(TODO_ERR);
+    const cacheRes = this.grades.addScore(sectionId, studentId, colId, score);
+    if (!cacheRes.isOk) return E.errResult(cacheRes.err);
+
+    // Persist in DB
+    const daoRes = await this.dao.addScore(sectionId, studentId, colId, score);
+    if (!daoRes.isOk) return E.errResult(daoRes.err);
+
+    return E.okResult(undefined);
   }
 
   /** return entry at [sectionId][rowId][colId].
@@ -117,7 +163,7 @@ export class DbGrades {
     : Promise<E.Result<T.Entry, E.Err>>
   {
     //TODO
-    return E.errResult(TODO_ERR);
+    return this.grades.getEntry(sectionId, rowId, colId);
   }
 
   /** return full data (including aggregate data) for sectionId.  If
@@ -146,7 +192,7 @@ export class DbGrades {
 	  colIds: T.ColId[] = []) : Promise<E.Result<T.SectionData, E.Err>>
   {
     //TODO
-    return E.errResult(TODO_ERR);
+    return this.grades.getSectionData(sectionId, rowIds, colIds);
   }
 
 
@@ -159,7 +205,13 @@ export class DbGrades {
   async rmSection(sectionId: T.SectionId) : Promise<E.Result<undefined, E.Err>> 
   {
     //TODO
-    return E.errResult(TODO_ERR);
+    const daoRes = await this.dao.rmSection(sectionId);
+    if (!daoRes.isOk) return E.errResult(daoRes.err);
+
+    // Remove from cache
+    this.grades.rmSection(sectionId);
+
+    return E.okResult(undefined);
   }
 
   // convenience methods
@@ -214,7 +266,6 @@ export class DbGrades {
       .map(h => h.id);
     return await this.getSectionData(sectionId, rowIds);
   }
-
 
   /** Create/replace sectionInfo and sectionData.  Will enroll all
    *  students from sectionData (assumes those students already exist
