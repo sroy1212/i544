@@ -46,7 +46,7 @@ describe('DB Grades', () => {
     
   });
 
-  describe.skip('global students', () => {
+  describe('global students', () => {
 
     it('must retrieve all added students but not retrieve bad students',
        async () => {
@@ -78,7 +78,7 @@ describe('DB Grades', () => {
     
   });
 
-  describe.skip('adding sectionInfo', () => {
+  describe('adding sectionInfo', () => {
 
     it('must add section-info\'s', async () => {
       for (const info of Object.values(SECTION_INFOS)) {
@@ -116,7 +116,7 @@ describe('DB Grades', () => {
     
   });
 
-  describe.skip('enrolling students', () => {
+  describe('enrolling students', () => {
 
     const N_STUDENTS = 3;
     beforeEach(async () => {
@@ -170,7 +170,7 @@ describe('DB Grades', () => {
   });
 
 
-  describe.skip('add score', () => {
+  describe('add score', () => {
     
     const N_STUDENTS = 3;
 
@@ -281,7 +281,7 @@ describe('DB Grades', () => {
 
   });
 
-  describe.skip('get Entry', () => {
+  describe('get Entry', () => {
     
     const N_STUDENTS = 3;
 
@@ -351,7 +351,7 @@ describe('DB Grades', () => {
     
   });
 
-  describe.skip('get section data', () => {
+  describe('get section data', () => {
 
     beforeEach(async () => {
       for (const student of STUDENTS) {
@@ -543,7 +543,7 @@ describe('DB Grades', () => {
 
   });
 
-  describe.skip('get Entry for all kinds of data', () => {
+  describe('get Entry for all kinds of data', () => {
 
     beforeEach(async () => {
       for (const student of STUDENTS) {
@@ -622,7 +622,7 @@ describe('DB Grades', () => {
 
   });
 
-  describe.skip('get raw data', () => {
+  describe('get raw data', () => {
 
     beforeEach(async () => {
       for (const student of STUDENTS) {
@@ -666,7 +666,7 @@ describe('DB Grades', () => {
     
   });
 
-  describe.skip('get single student data', () => {
+  describe('get single student data', () => {
 
     beforeEach(async () => {
       for (const student of STUDENTS) {
@@ -717,7 +717,7 @@ describe('DB Grades', () => {
     
   });
 
-  describe.skip('get aggr rows', () => {
+  describe('get aggr rows', () => {
 
     beforeEach(async () => {
       for (const student of STUDENTS) {
@@ -768,7 +768,7 @@ describe('DB Grades', () => {
 });
 
 
-describe.skip('DB Grades persistence', () => {
+describe('DB Grades persistence', () => {
 
   //mocha will run beforeEach() before each test to set up these variables
   let memDbServer : MemDbServer;
