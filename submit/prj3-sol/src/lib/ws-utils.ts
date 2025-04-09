@@ -3,6 +3,8 @@ import { Link, SelfLinks, NavLinks,
   from './response-envelopes.js';
 
 import { Errors as E} from 'prj2-sol';
+import { ZodType } from 'zod';
+
 
 import Express from 'express';
 import assert from 'assert';
@@ -24,8 +26,6 @@ export function selfHref(req: Express.Request, id: string = '') {
   return url.pathname + (id ? `/${id}` : url.search);
 }
 
-
-
 /** Return a success envelope for a single result. */
 export function selfResult<T>(req: Express.Request, result: T,
 		       status: number = STATUS.OK)
@@ -37,6 +37,9 @@ export function selfResult<T>(req: Express.Request, result: T,
 	   links: { self: { rel: 'self', href: selfHref(req), method } },
 	   result,
 	 };
+}
+export function successResult<T>(val: T) {
+  return { ok: true, val };
 }
 
 

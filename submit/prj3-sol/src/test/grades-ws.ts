@@ -39,7 +39,7 @@ describe('grades web services', () => {
     await memDbServer.stop();
   });
 
-  describe.skip('add global student', () => {
+  describe('add global student', () => {
     
     it('must successfully add a student', async () => {
       await addStudent(ws, StudentsData[0]);
@@ -74,7 +74,7 @@ describe('grades web services', () => {
 
   });
   
-  describe.skip('retrieve global student', () => {
+  describe('retrieve global student', () => {
 
     it('must retrieve an added student', async () => {
       const student = StudentsData[0];
@@ -87,23 +87,23 @@ describe('grades web services', () => {
     });
 
     // ensure we can add/retrieve student having all fields string "null".
-    it.skip('must add/retrieve nully student', async () => {
+    it('must add/retrieve nully student', async () => {
       'TODO';
     });
 
     // ensure retrieving a student with an ID starting with $ fails
-    it.skip('BAD_REQUEST/BAD_REQ on retrieving student with bad ID', async () => {
+    it('BAD_REQUEST/BAD_REQ on retrieving student with bad ID', async () => {
       'TODO';
     });
     
     // ensure retrieving an unknown student is NOT_FOUND
-    it.skip('NOT_FOUND/NOT_FOUND to retrieve student with unknown ID', async () => {
+    it('NOT_FOUND/NOT_FOUND to retrieve student with unknown ID', async () => {
       'TODO';
     });
     
   });
 
-  describe.skip('add section-info', () => {
+  describe('add section-info', () => {
 
     it('must successfully add a section-info', async () => {
       await addSection(ws, 'cs201' as T.SectionId);
@@ -159,7 +159,7 @@ describe('grades web services', () => {
     
   });
 
-  describe.skip('retrieve section-info', () => {
+  describe('retrieve section-info', () => {
 
     it('must successfully retrieve an added section-info', async () => {
       const sectionId = 'cs201' as T.SectionId;
@@ -182,7 +182,7 @@ describe('grades web services', () => {
 
   });
 
-  describe.skip('enroll student in section', () => {
+  describe('enroll student in section', () => {
 
     let sectionId: T.SectionId;
     let studentId: T.StudentId;
@@ -260,7 +260,7 @@ describe('grades web services', () => {
       await enrollStudent(ws, sectionId, studentId1);
     });
 
-    describe.skip('add score', () => {
+    describe('add score', () => {
       
       it('must add valid score', async () => {
 	const url = `${BASE}/sections/${sectionId}/data/${studentId}/prj1`;
@@ -329,7 +329,7 @@ describe('grades web services', () => {
       
     });
 
-    describe.skip('get score', () => {
+    describe('get score', () => {
       
       it('must retrieve added score', async () => {
 	const url = `${BASE}/sections/${sectionId}/data/${studentId}/prj1`;
@@ -362,7 +362,7 @@ describe('grades web services', () => {
 
     });
 
-  describe.skip('get Entry for all kinds of data', () => {
+  describe('get Entry for all kinds of data', () => {
 
     beforeEach(async () => {
       for (const student of StudentsData) {
@@ -447,7 +447,7 @@ describe('grades web services', () => {
 
   });
 
-    describe.skip('add multiple scores', () => {
+    describe('add multiple scores', () => {
       
       it('must add multiple scores', async () => {
 	const scores = { prj1: 1, prj2: 2, prj3: 3, hw1: 10, hw2: 20 };
@@ -495,7 +495,7 @@ describe('grades web services', () => {
       }
     });
 
-    describe.skip('get all section data', () => {
+    describe('get all section data', () => {
       
       it('must retrieve all data and aggregates', async () => {
 	for (const sectionId of sectionIds) {
@@ -523,7 +523,7 @@ describe('grades web services', () => {
 
     });
 
-    describe.skip('get selected section data', () => {
+    describe('get selected section data', () => {
       
       it('must retrieve only aggregate rows', async () => {
 	for (const sectionId of sectionIds) {
@@ -705,7 +705,7 @@ describe('grades web services', () => {
 
     });
 
-    describe.skip('get raw section data', () => {
+    describe('get raw section data', () => {
 
       it('must retrieve all raw data', async () => {
 	for (const sectionId of sectionIds) {
@@ -744,7 +744,7 @@ describe('grades web services', () => {
 
     });
 
-    describe.skip('get single student data', () => {
+    describe('get single student data', () => {
 
       const N_STUDENTS = 3;
 
@@ -788,7 +788,7 @@ describe('grades web services', () => {
       
     });
 
-    describe.skip('get aggr rows', () => {
+    describe('get aggr rows', () => {
 
       it('must retrieve aggr rows', async () => {
 	for (const sectionId of sectionIds) {

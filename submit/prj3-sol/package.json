@@ -1,0 +1,45 @@
+{
+  "name": "prj3-sol",
+  "version": "1.0.0",
+  "description": "Name:\t\tSupriya Roy B-Number:\tB01099022 Email:\t\tsroy15@binghamton.edu",
+  "main": "index.js",
+  "scripts": {
+    "clean": "shx rm -rf dist",
+    "build": "npx tsc",
+    "postbuild": "shx test -e dist/index.js && shx chmod a+x dist/index.js || true",
+    "watch": "tsc --watch",
+    "pretest": "npm run build",
+    "test": "mocha --reporter-options maxDiffSize=128000 dist/test",
+    "predebug-test": "npm run build",
+    "debug-test": "mocha --inspect-brk dist/test"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/chai": "^5.2.1",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.14.0",
+    "@types/semver": "^7.7.0",
+    "@types/supertest": "^6.0.3",
+    "chai": "^5.2.0",
+    "mocha": "^11.1.0",
+    "mongodb-memory-server": "^10.1.4",
+    "shx": "^0.4.0",
+    "supertest": "^7.1.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "http-status": "^2.1.0",
+    "mongodb": "^6.15.0",
+    "prj2-sol": "https://sunybing:sunybing@zdu.binghamton.edu/cs544/lib/prj2-sol-0.0.1.tgz",
+    "zod": "^3.24.2"
+  }
+}
