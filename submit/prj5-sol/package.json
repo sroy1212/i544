@@ -1,0 +1,31 @@
+{
+  "name": "prj5-sol",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx parcel src/statics/index.html  --dist-dir=target --port 2347",
+    "clean": "npx shx rm -rf dist target .parcel-cache",
+    "build": "npx tsc",
+    "watch": "npx tsc --watch",
+    "test": "npx shx echo No tests specified"
+  },
+  "type": "module",
+  "browserslist": [
+    "since 2025-01"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/react": "^18.2.78",
+    "@types/react-dom": "^18.2.25",
+    "parcel": "^2.14.4",
+    "shx": "^0.4.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "grades-client-lib": "https://sunybing:sunybing@zdu.binghamton.edu/cs544/lib/grades-client-lib-0.0.2.tgz",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
