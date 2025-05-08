@@ -8,13 +8,28 @@
     <form id="form">
       <input name="words" id="words" value="hello world">
       <br>
-      <!-- area for dynamic word display -->
       <div id="words-show"></div>
     </form>
     <script>
       (function IIFE() {
-	//TODO
-	
+        let currentIndex = 0;
+        let words = ['hello', 'world'];
+        const input = document.getElementById('words');
+        const display = document.getElementById('words-show');
+
+        function updateWord() {
+          if (words.length > 0) {
+            display.textContent = words[currentIndex];
+            currentIndex = (currentIndex + 1) % words.length;
+          }
+        }
+
+        input.addEventListener('blur', () => {
+          words = input.value.trim().split(/\s+/); 
+          currentIndex = 0; 
+        });
+
+        setInterval(updateWord, 1000);
       })();
     </script>
   </body>

@@ -24,9 +24,21 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/chai": "^5.2.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.15.12",
+    "@types/semver": "^7.7.0",
+    "@types/supertest": "^6.0.3",
+    "chai": "^5.2.0",
     "grades-client-lib": "https://sunybing:sunybing@zdu.binghamton.edu/cs544/lib/grades-client-lib-0.0.2.tgz",
+    "mocha": "^11.2.2",
+    "mongodb-memory-server": "^10.1.4",
+    "prj2-sol": "https://sunybing:sunybing@zdu.binghamton.edu/cs544/lib/prj2-sol-0.0.1.tgz",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "main": "index.js"
+    "react-dom": "^18.2.0",
+    "supertest": "^7.1.0"
+  }
 }

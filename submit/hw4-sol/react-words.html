@@ -9,12 +9,43 @@
   </head>
   <body>
     <h1>React Words</h1>
-      
     <div id="root"></div>
-    
     <script type="text/babel">
+      function WordCycler() {
+        const [words, setWords] = React.useState(["hello", "world"]);
+        const [currentWord, setCurrentWord] = React.useState("hello");
+        const [index, setIndex] = React.useState(0);
 
-      //TODO: render app into #root
+        const handleBlur = (event) => {
+          const newWords = event.target.value.trim().split(/\s+/);
+          setWords(newWords);
+          setIndex(0); 
+        };
+
+        React.useEffect(() => {
+          const interval = setInterval(() => {
+            setCurrentWord(words[index]);
+            setIndex((prevIndex) => (prevIndex + 1) % words.length);
+          }, 1000);
+
+          return () => clearInterval(interval);
+        }, [index, words]);
+
+        return (
+          <div>
+            <input
+              name="words"
+              id="words"
+              defaultValue="hello world"
+              onBlur={handleBlur}
+            />
+            <br />
+            <div id="words-show">{currentWord}</div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<WordCycler />);
     </script>
   </body>
 </html>

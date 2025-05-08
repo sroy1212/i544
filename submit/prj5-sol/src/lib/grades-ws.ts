@@ -112,8 +112,18 @@ export class GradesWs {
   
   /** return a complete URL for relApiApth and query. */
   private wsUrl(relApiPath: string, query?: Record<string, string|string[]>) {
-    //TODO
-    return '';
+    const url = new URL(`${this.hostUrl}/api/${relApiPath}`);
+    if (query) {
+      for (const [k, v] of Object.entries(query)) {
+	if (Array.isArray(v)) {
+	  for (const v1 of v) url.searchParams.append(k, v1);
+	}
+	else {
+	  url.searchParams.append(k, v.toString());
+	}
+      }
+    }
+    return url.href;
   }
 
 }
@@ -132,9 +142,32 @@ async function doFetchJson<T>(method: string, url: string,
 			      jsonBody?: any)
   : Promise<E.Result<T, E.Errs>>
 {
+  const options: { [key: string]: any } = { method: method.toUpperCase(), };
+  if (jsonBody !== undefined) {
+    options.headers = { 'Content-Type': 'application/json' };
+    options.body = JSON.stringify(jsonBody);
+  }
   try {
-    //TODO
-    return E.okResult(undefined);
+    const response = await fetch(url, options);
+    /*
+    if (!response.ok) {
+      const msg = `${method} ${url}: status ${response.status}`;
+      return E.errResult(E.Errs.err(msg));
+    }
+    */
+    const contentLength = Number(response.headers.get('content-length') ?? 0);
+    if (contentLength === 0) {
+      const msg = `${method} ${url}: no body in response`;
+      return E.errResult(E.Errs.err(msg));
+    }
+    const data = await response.json();
+    if (data.isOk === undefined) {
+      const msg = `${method} ${url}: missing isOk in body`;
+      return E.errResult(E.Errs.err(msg));
+    }
+    return (data.isOk)
+      ? E.okResult(data.result)
+      : makeErrors(method, url, data.errors);
   }
   catch (err) {
     console.error(err);
